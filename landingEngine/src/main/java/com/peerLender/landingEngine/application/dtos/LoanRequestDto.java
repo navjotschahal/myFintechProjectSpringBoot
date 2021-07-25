@@ -6,10 +6,10 @@ public class LoanRequestDto {
 
 	private int loanAmount;
 	private long borrowerUserId;
-	private int repaymentTermDays;
+	private long repaymentTermDays;
 	private double interestRate;
 
-	public LoanRequestDto(int loanAmount, int borrowerUserId, int repaymentTermDays, double interestRate) {
+	public LoanRequestDto(int loanAmount, long borrowerUserId, long repaymentTermDays, double interestRate) {
 		this.loanAmount = loanAmount;
 		this.borrowerUserId = borrowerUserId;
 		this.repaymentTermDays = repaymentTermDays;
@@ -33,7 +33,7 @@ public class LoanRequestDto {
 	/**
 	 * @return the repaymentTermDays
 	 */
-	public int getRepaymentTermDays() {
+	public long getRepaymentTermDays() {
 		return repaymentTermDays;
 	}
 

@@ -37,6 +37,13 @@ public final class User {
 	}
 
 	/**
+	 * @return the id
+	 */
+	public long getId() {
+		return id;
+	}
+
+	/**
 	 * @return the firstName
 	 */
 	public String getFirstName() {

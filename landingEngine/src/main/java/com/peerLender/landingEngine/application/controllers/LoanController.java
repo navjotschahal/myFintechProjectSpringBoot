@@ -40,5 +40,10 @@ public class LoanController {
 	private List<User> getLoanUsers() {
 		return userRepository.findAll();
 	}
+	
+	@GetMapping(value = {"loan/requests"})
+	private List<LoanRequestDto> getLoanRequests() {
+		return loanRequestServiceImpl.findAllLoanRequestsAsLoanRequestDto();
+	}
 
 }

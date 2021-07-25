@@ -21,12 +21,23 @@ public class LoanRequest {
 	private Duration repaymentTerm;
 	private double interestRate;
 
+	public LoanRequest() {
+		super();
+	}
+
 	public LoanRequest(int loanAmount, User borrower, Duration repaymentTerm, double interestRate) {
 		super();
 		this.loanAmount = loanAmount;
 		this.borrower = borrower;
 		this.repaymentTerm = repaymentTerm;
 		this.interestRate = interestRate;
+	}
+
+	/**
+	 * @return the id
+	 */
+	public long getId() {
+		return id;
 	}
 
 	/**

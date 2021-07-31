@@ -13,7 +13,7 @@ import javax.persistence.ManyToOne;
 public class LoanRequest {
 
 	@Id()
-	@GeneratedValue(strategy=GenerationType.IDENTITY)
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private long id;
 	private int loanAmount;
 	@ManyToOne

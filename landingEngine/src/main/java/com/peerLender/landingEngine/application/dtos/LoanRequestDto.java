@@ -4,16 +4,30 @@ import java.util.Objects;
 
 public class LoanRequestDto {
 
+	private String loanRequestId;
 	private int loanAmount;
-	private long borrowerUserId;
 	private long repaymentTermDays;
 	private double interestRate;
 
-	public LoanRequestDto(int loanAmount, long borrowerUserId, long repaymentTermDays, double interestRate) {
+	public LoanRequestDto(String loanRequestId, int loanAmount, long repaymentTermDays, double interestRate) {
+		this.loanRequestId = loanRequestId;
 		this.loanAmount = loanAmount;
-		this.borrowerUserId = borrowerUserId;
 		this.repaymentTermDays = repaymentTermDays;
 		this.interestRate = interestRate;
+	}
+
+	/**
+	 * @return the loanRequestId
+	 */
+	public String getLoanRequestId() {
+		return loanRequestId;
+	}
+
+	/**
+	 * @param loanRequestId the loanRequestId to set
+	 */
+	public void setLoanRequestId(String loanRequestId) {
+		this.loanRequestId = loanRequestId;
 	}
 
 	/**
@@ -21,13 +35,6 @@ public class LoanRequestDto {
 	 */
 	public int getLoanAmount() {
 		return loanAmount;
-	}
-
-	/**
-	 * @return the borrowerUserId
-	 */
-	public long getBorrowerUserId() {
-		return borrowerUserId;
 	}
 
 	/**
@@ -46,7 +53,7 @@ public class LoanRequestDto {
 
 	@Override
 	public int hashCode() {
-		return Objects.hash(borrowerUserId, interestRate, loanAmount, repaymentTermDays);
+		return Objects.hash(interestRate, loanAmount, repaymentTermDays);
 	}
 
 	@Override
@@ -58,14 +65,12 @@ public class LoanRequestDto {
 		if (getClass() != obj.getClass())
 			return false;
 		LoanRequestDto other = (LoanRequestDto) obj;
-		return borrowerUserId == other.borrowerUserId
-				&& Double.doubleToLongBits(interestRate) == Double.doubleToLongBits(other.interestRate)
+		return Double.doubleToLongBits(interestRate) == Double.doubleToLongBits(other.interestRate)
 				&& loanAmount == other.loanAmount && repaymentTermDays == other.repaymentTermDays;
 	}
 
 	@Override
 	public String toString() {
-		return "LoanRequestDto [loanAmount=" + loanAmount + ", borrowerUserId=" + borrowerUserId
-				+ ", repaymentTermDays=" + repaymentTermDays + ", interestRate=" + interestRate + "]";
+		return "LoanRequestDto [loanAmount=" + loanAmount + ", repaymentTermDays=" + repaymentTermDays + ", interestRate=" + interestRate + "]";
 	}
 }

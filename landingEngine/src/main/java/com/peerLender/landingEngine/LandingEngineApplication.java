@@ -7,7 +7,7 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
-import com.peerLender.landingEngine.application.controllers.enums.Occupation;
+import com.peerLender.landingEngine.application.enums.Occupation;
 import com.peerLender.landingEngine.domain.model.User;
 import com.peerLender.landingEngine.domain.repository.UserRepository;
 
@@ -29,7 +29,7 @@ public class LandingEngineApplication implements CommandLineRunner {
 		for (int i = 0; i < 100; i++) {
 			String borrowerOccupation = occupations[rand.nextInt(numOfOccupations)].toString();
 			int age = rand.nextInt(100-18) + 18;
-			userRepository.save(new User(i, "fName" + i, "lName" + i, age, borrowerOccupation));
+			userRepository.save(new User("UserName" + i, "fName" + i, "lName" + i, age, borrowerOccupation));
 		}
 	}
 

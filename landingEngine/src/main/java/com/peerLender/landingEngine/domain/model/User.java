@@ -9,7 +9,7 @@ import javax.persistence.Id;
 public final class User {
 	
 	@Id
-	private long id;
+	private String userName;
 	private String firstName;
 	private String lasttName;
 	private int age;
@@ -19,9 +19,9 @@ public final class User {
 		super();
 	}
 
-	public User(int id, String firstName, String lasttName, int age, String occupation) {
+	public User(String userName, String firstName, String lasttName, int age, String occupation) {
 		super();
-		this.id = id;
+		this.userName = userName;
 		this.firstName = firstName;
 		this.lasttName = lasttName;
 		this.age = age;
@@ -37,10 +37,10 @@ public final class User {
 	}
 
 	/**
-	 * @return the id
+	 * @return the userName
 	 */
-	public long getId() {
-		return id;
+	public String getUserName() {
+		return userName;
 	}
 
 	/**

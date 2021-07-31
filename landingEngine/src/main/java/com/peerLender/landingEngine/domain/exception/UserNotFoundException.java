@@ -7,8 +7,8 @@ public class UserNotFoundException extends RuntimeException {
 		// TODO Auto-generated constructor stub
 	}
 
-	public UserNotFoundException(long userId) {
-		super("User with ID: " + userId + " is not found.");
+	public UserNotFoundException(String userName) {
+		super("User with userName: " + userName + " is not found/doesn't exist.");
 	}
 
 }

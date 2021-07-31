@@ -30,33 +30,28 @@ public class LoanRequestServiceImpl implements LoanRequestService {
 		this.loanRequestRepository = loanRequestRepository;
 	}
 
-	public LoanRequest transform(LoanRequestDto loanRequestDto) {
-		Optional<User> borrower = userRepository.findById(loanRequestDto.getBorrowerUserId());
-		if (borrower.isPresent()) {
+	public LoanRequest transform(LoanRequestDto loanRequestDto, User user) {
 			return new LoanRequest(
 					loanRequestDto.getLoanAmount(),
-					borrower.get(),
+					user,
 					Duration.ofDays(loanRequestDto.getRepaymentTermDays()),
 					loanRequestDto.getInterestRate()
 				);
-		} else {
-			throw new UserNotFoundException(loanRequestDto.getBorrowerUserId());
-		}
 	}
 	
 	public LoanRequestDto transform(LoanRequest loanRequest) {
 		boolean loanRequestexists = loanRequestRepository.existsById(loanRequest.getId());
-		long borrowerId = loanRequest.getBorrower().getId();
-		boolean borrowerUserexists = userRepository.existsById(borrowerId);
+		String borrowerUserName = loanRequest.getBorrower().getUserName();
+		boolean borrowerUserexists = userRepository.existsById(borrowerUserName);
 		if (borrowerUserexists && loanRequestexists) {
 			return new LoanRequestDto(
+					String.valueOf(loanRequest.getId()),
 					loanRequest.getLoanAmount(),
-					loanRequest.getBorrower().getId(),
 					loanRequest.getRepaymentTerm().toDays(),
 					loanRequest.getInterestRate()
 				);
 		} else {
-			throw loanRequestexists ? new UserNotFoundException(borrowerId) : new LoanRequestNotFoundException(loanRequest.getId());
+			throw loanRequestexists ? new UserNotFoundException(borrowerUserName) : new LoanRequestNotFoundException(loanRequest.getId());
 		}
 	}
 	

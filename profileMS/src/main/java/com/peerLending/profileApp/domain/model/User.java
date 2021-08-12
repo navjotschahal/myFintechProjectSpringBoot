@@ -23,6 +23,7 @@ public class User {
 	 */
 	public User() {
 		super();
+		this.registeredSince = LocalDate.now();
 	}
 	/**
 	 * @param userName
@@ -32,15 +33,15 @@ public class User {
 	 * @param occupation
 	 * @param registeredSince
 	 */
-	public User(String userName, String firstName, String lastName, int age, String occupation,
-			LocalDate registeredSince) {
+	public User(String userName, String firstName, String lastName, int age, String occupation
+			) {
 		super();
 		this.userName = userName;
 		this.firstName = firstName;
 		this.lastName = lastName;
 		this.age = age;
 		this.occupation = occupation;
-		this.registeredSince = registeredSince;
+		this.registeredSince = LocalDate.now();
 	}
 	/**
 	 * @return the userName

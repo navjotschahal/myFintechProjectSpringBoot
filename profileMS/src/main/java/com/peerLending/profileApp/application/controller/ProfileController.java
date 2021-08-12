@@ -40,7 +40,7 @@ public class ProfileController {
 	
 	@PutMapping("/user")
 	public void updateUser(@RequestBody final User updatedUser) {
-		updatedUser.setRegisteredSince(LocalDate.now());
+//		updatedUser.setRegisteredSince(LocalDate.now());
 		userRepository.save(updatedUser);
 	}
 }

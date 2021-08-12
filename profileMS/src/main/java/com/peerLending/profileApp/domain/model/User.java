@@ -109,12 +109,6 @@ public class User {
 	public LocalDate getRegisteredSince() {
 		return registeredSince;
 	}
-	/**
-	 * @param registeredSince the registeredSince to set
-	 */
-	public void setRegisteredSince(LocalDate registeredSince) {
-		this.registeredSince = registeredSince;
-	}
 	@Override
 	public int hashCode() {
 		return Objects.hash(age, firstName, lastName, occupation, registeredSince, userName);

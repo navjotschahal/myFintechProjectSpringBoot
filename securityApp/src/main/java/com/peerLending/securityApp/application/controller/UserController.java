@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.peerLending.securityApp.dto.UserDto;
 import com.peerLending.securityApp.user.entity.User;
 import com.peerLending.securityApp.user.exception.UserNotFoundException;
 import com.peerLending.securityApp.user.repository.UserRepository;
@@ -31,9 +32,10 @@ public class UserController {
 	}
 
 	@PostMapping("/register")
-	public void register(@RequestBody User user) {
+	public void register(@RequestBody UserDto userDto) {
+		User user = new User(userDto.getUserName(), userDto.getPassword());
 		userRepository.save(user);
-		notificationServiceImpl.sendMessage(user);
+		notificationServiceImpl.sendMessage(userDto);
 	}
 
 	@GetMapping("/validate")

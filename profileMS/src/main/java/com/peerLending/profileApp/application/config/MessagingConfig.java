@@ -17,7 +17,7 @@ import com.peerLending.profileApp.domain.event.UserRegisteredEventHandler;
 public class MessagingConfig {
 
 	private static final String TOPIC = "userRegisteredTopic";
-	private static final String QUEUE_NAME = "user.registered";
+	private static final String QUEUE_NAME = "user.registered.profile";
 
 	@Bean
 	public Queue userRegisteredQueue() {

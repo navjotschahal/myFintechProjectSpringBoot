@@ -2,8 +2,10 @@ package com.peerLender.landingEngine.domain.model;
 
 import java.util.Objects;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.OneToOne;
 
 @Entity
 public final class User {
@@ -14,26 +16,29 @@ public final class User {
 	private String lasttName;
 	private int age;
 	private String occupation;
+	@OneToOne(cascade = {CascadeType.ALL})
+	private Balance balance;
 	
 	public User() {
 		super();
 	}
 
-	public User(String userName, String firstName, String lasttName, int age, String occupation) {
+	public User(String userName, String firstName, String lasttName, int age, String occupation, Balance balance) {
 		super();
 		this.userName = userName;
 		this.firstName = firstName;
 		this.lasttName = lasttName;
 		this.age = age;
 		this.occupation = occupation;
+		this.balance = balance;
 	}
-
-	public User(String firstName, String lasttName, int age, String occupation) {
-		super();
-		this.firstName = firstName;
-		this.lasttName = lasttName;
-		this.age = age;
-		this.occupation = occupation;
+	
+	public void topUp(final Money money) {
+		this.balance.topUp(money);
+	}
+	
+	public void withDrawl(final Money money) {
+		this.balance.withdraw(money);
 	}
 
 	/**
@@ -71,9 +76,23 @@ public final class User {
 		return occupation;
 	}
 
+	/**
+	 * @return the balance
+	 */
+	public Balance getBalance() {
+		return balance;
+	}
+
+	/**
+	 * @param balance the balance to set
+	 */
+	public void setBalance(Balance balance) {
+		this.balance = balance;
+	}
+
 	@Override
 	public int hashCode() {
-		return Objects.hash(age, firstName, lasttName, occupation);
+		return Objects.hash(age, balance, firstName, lasttName, occupation, userName);
 	}
 
 	@Override
@@ -85,14 +104,16 @@ public final class User {
 		if (getClass() != obj.getClass())
 			return false;
 		User other = (User) obj;
-		return age == other.age && Objects.equals(firstName, other.firstName)
-				&& Objects.equals(lasttName, other.lasttName) && Objects.equals(occupation, other.occupation);
+		return age == other.age && Objects.equals(balance, other.balance) && Objects.equals(firstName, other.firstName)
+				&& Objects.equals(lasttName, other.lasttName) && Objects.equals(occupation, other.occupation)
+				&& Objects.equals(userName, other.userName);
 	}
 
 	@Override
 	public String toString() {
-		return "User [firstName=" + firstName + ", lasttName=" + lasttName + ", age=" + age + ", occupation="
-				+ occupation + "]";
+		return "User [userName=" + userName + ", firstName=" + firstName + ", lasttName=" + lasttName + ", age=" + age
+				+ ", occupation=" + occupation + ", balance=" + balance + "]";
 	}
+
 
 }

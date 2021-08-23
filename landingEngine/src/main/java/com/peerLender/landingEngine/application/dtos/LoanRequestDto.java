@@ -5,11 +5,11 @@ import java.util.Objects;
 public class LoanRequestDto {
 
 	private String loanRequestId;
-	private int loanAmount;
+	private double loanAmount;
 	private long repaymentTermDays;
 	private double interestRate;
 
-	public LoanRequestDto(String loanRequestId, int loanAmount, long repaymentTermDays, double interestRate) {
+	public LoanRequestDto(String loanRequestId, double loanAmount, long repaymentTermDays, double interestRate) {
 		this.loanRequestId = loanRequestId;
 		this.loanAmount = loanAmount;
 		this.repaymentTermDays = repaymentTermDays;
@@ -33,7 +33,7 @@ public class LoanRequestDto {
 	/**
 	 * @return the loanAmount
 	 */
-	public int getLoanAmount() {
+	public double getLoanAmount() {
 		return loanAmount;
 	}
 

@@ -22,7 +22,7 @@ public class ProfileMsApplication implements CommandLineRunner {
 	@Override
 	public void run(String... args) throws Exception {
 		for (int i = 0; i < 10; i++) {
-			userRepository.save(new User("username" + i, "user" + i, "lastName", 45, "occupation"));
+			userRepository.save(new User("UserName" + i, "fName" + i, "lName" + i, 45, "occupation"));
 		}
 		
 	}

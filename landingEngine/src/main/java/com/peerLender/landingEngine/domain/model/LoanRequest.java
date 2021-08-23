@@ -9,13 +9,15 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 
+import com.peerLender.landingEngine.application.enums.Currency;
+
 @Entity
 public class LoanRequest {
 
 	@Id()
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private long id;
-	private int loanAmount;
+	private double loanAmount;
 	@ManyToOne
 	private User borrower;
 	private Duration repaymentTerm;
@@ -25,7 +27,7 @@ public class LoanRequest {
 		super();
 	}
 
-	public LoanRequest(int loanAmount, User borrower, Duration repaymentTerm, double interestRate) {
+	public LoanRequest(double loanAmount, User borrower, Duration repaymentTerm, double interestRate) {
 		super();
 		this.loanAmount = loanAmount;
 		this.borrower = borrower;
@@ -43,8 +45,8 @@ public class LoanRequest {
 	/**
 	 * @return the loanAmount
 	 */
-	public int getLoanAmount() {
-		return loanAmount;
+	public Money getLoanAmount() {
+		return new Money(Currency.USD, this.loanAmount);
 	}
 
 	/**

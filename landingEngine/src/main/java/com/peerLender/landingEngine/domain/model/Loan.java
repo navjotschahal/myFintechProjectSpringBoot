@@ -3,12 +3,15 @@ package com.peerLender.landingEngine.domain.model;
 import java.time.LocalDate;
 import java.util.Objects;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
+
+import org.hibernate.annotations.Cascade;
 
 @Entity
 public class Loan {
@@ -19,16 +22,19 @@ public class Loan {
 	private User borrower;
 	@ManyToOne
 	private User lender;
-	private long loanAmount;
+	@OneToOne(cascade = CascadeType.ALL)
+	private Money loanAmount;
 	private double interestRate;
 	private LocalDate dateLent;
 	private LocalDate dateDue;
+	@OneToOne(cascade = CascadeType.ALL)
+	private Money amountRepayed;
 
 	public Loan() {
 		super();
 	}
 
-	public Loan(User borrower, User lender, long loanAmount, double interestRate, LocalDate dateLent,
+	public Loan(User borrower, User lender, Money loanAmount, double interestRate, LocalDate dateLent,
 			LocalDate dateDue) {
 		super();
 		this.borrower = borrower;
@@ -37,6 +43,7 @@ public class Loan {
 		this.interestRate = interestRate;
 		this.dateLent = dateLent;
 		this.dateDue = dateDue;
+		this.amountRepayed = Money.ZERO;
 	}
 	
 	public Loan(User lender, LoanRequest loanRequest) {
@@ -47,6 +54,17 @@ public class Loan {
 		this.interestRate = loanRequest.getInterestRate();
 		this.dateLent = LocalDate.now();
 		this.dateDue = LocalDate.now().plusDays(loanRequest.getRepaymentTerm().toDays());
+		this.amountRepayed = Money.ZERO;
+	}
+	
+	public void repay(final Money money) {
+		this.borrower.withDrawl(money);
+		this.lender.topUp(money);
+		this.amountRepayed =  this.amountRepayed.add(money);
+	}
+	
+	public Money getAmountOwed() {
+		return loanAmount.times(1 + this.interestRate/100d).minus(amountRepayed);
 	}
 
 	/**
@@ -94,14 +112,14 @@ public class Loan {
 	/**
 	 * @return the loanAmount
 	 */
-	public long getLoanAmount() {
+	public Money getLoanAmount() {
 		return loanAmount;
 	}
 
 	/**
 	 * @param loanAmount the loanAmount to set
 	 */
-	public void setLoanAmount(long loanAmount) {
+	public void setLoanAmount(Money loanAmount) {
 		this.loanAmount = loanAmount;
 	}
 
@@ -147,9 +165,23 @@ public class Loan {
 		this.dateDue = dateDue;
 	}
 
+	/**
+	 * @return the amountRepayed
+	 */
+	public Money getAmountRepayed() {
+		return amountRepayed;
+	}
+
+	/**
+	 * @param amountRepayed the amountRepayed to set
+	 */
+	public void setAmountRepayed(Money amountRepayed) {
+		this.amountRepayed = amountRepayed;
+	}
+
 	@Override
 	public int hashCode() {
-		return Objects.hash(borrower, dateDue, dateLent, id, interestRate, lender, loanAmount);
+		return Objects.hash(amountRepayed, borrower, dateDue, dateLent, id, interestRate, lender, loanAmount);
 	}
 
 	@Override
@@ -161,15 +193,17 @@ public class Loan {
 		if (getClass() != obj.getClass())
 			return false;
 		Loan other = (Loan) obj;
-		return Objects.equals(borrower, other.borrower) && Objects.equals(dateDue, other.dateDue)
-				&& Objects.equals(dateLent, other.dateLent) && id == other.id
+		return Objects.equals(amountRepayed, other.amountRepayed) && Objects.equals(borrower, other.borrower)
+				&& Objects.equals(dateDue, other.dateDue) && Objects.equals(dateLent, other.dateLent) && id == other.id
 				&& Double.doubleToLongBits(interestRate) == Double.doubleToLongBits(other.interestRate)
-				&& Objects.equals(lender, other.lender) && loanAmount == other.loanAmount;
+				&& Objects.equals(lender, other.lender) && Objects.equals(loanAmount, other.loanAmount);
 	}
 
 	@Override
 	public String toString() {
 		return "Loan [id=" + id + ", borrower=" + borrower + ", lender=" + lender + ", loanAmount=" + loanAmount
-				+ ", interestRate=" + interestRate + ", dateLent=" + dateLent + ", dateDue=" + dateDue + "]";
+				+ ", interestRate=" + interestRate + ", dateLent=" + dateLent + ", dateDue=" + dateDue
+				+ ", amountRepayed=" + amountRepayed + "]";
 	}
+
 }

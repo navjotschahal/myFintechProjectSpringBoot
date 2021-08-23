@@ -46,7 +46,7 @@ public class LoanRequestServiceImpl implements LoanRequestService {
 		if (borrowerUserexists && loanRequestexists) {
 			return new LoanRequestDto(
 					String.valueOf(loanRequest.getId()),
-					loanRequest.getLoanAmount(),
+					loanRequest.getLoanAmount().getAmount(),
 					loanRequest.getRepaymentTerm().toDays(),
 					loanRequest.getInterestRate()
 				);

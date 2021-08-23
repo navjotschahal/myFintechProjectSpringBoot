@@ -9,16 +9,16 @@ import javax.persistence.OneToOne;
 
 @Entity
 public final class User {
-	
+
 	@Id
 	private String userName;
 	private String firstName;
 	private String lasttName;
 	private int age;
 	private String occupation;
-	@OneToOne(cascade = {CascadeType.ALL})
+	@OneToOne(cascade = { CascadeType.ALL })
 	private Balance balance;
-	
+
 	public User() {
 		super();
 	}
@@ -32,11 +32,11 @@ public final class User {
 		this.occupation = occupation;
 		this.balance = balance;
 	}
-	
+
 	public void topUp(final Money money) {
 		this.balance.topUp(money);
 	}
-	
+
 	public void withDrawl(final Money money) {
 		this.balance.withdraw(money);
 	}
@@ -114,6 +114,5 @@ public final class User {
 		return "User [userName=" + userName + ", firstName=" + firstName + ", lasttName=" + lasttName + ", age=" + age
 				+ ", occupation=" + occupation + ", balance=" + balance + "]";
 	}
-
 
 }

@@ -87,7 +87,7 @@ public class LoanController {
 
 		return loanServiceImpl.findAllLentLoans(borrower);
 	}
-	
+
 	@PostMapping("/loan/repay")
 	public void repayLoan(@RequestBody LoanRepaymentRequest loanRepaymentRequest, @RequestHeader String authorization) {
 		User borrower = this.tokenValidationServiceImpl.validateTokenAndGetUser(authorization);

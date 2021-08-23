@@ -71,6 +71,7 @@ public class LoanRequestDto {
 
 	@Override
 	public String toString() {
-		return "LoanRequestDto [loanAmount=" + loanAmount + ", repaymentTermDays=" + repaymentTermDays + ", interestRate=" + interestRate + "]";
+		return "LoanRequestDto [loanAmount=" + loanAmount + ", repaymentTermDays=" + repaymentTermDays
+				+ ", interestRate=" + interestRate + "]";
 	}
 }

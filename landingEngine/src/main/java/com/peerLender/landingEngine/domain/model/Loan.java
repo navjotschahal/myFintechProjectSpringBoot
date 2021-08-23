@@ -45,7 +45,7 @@ public class Loan {
 		this.dateDue = dateDue;
 		this.amountRepayed = Money.ZERO;
 	}
-	
+
 	public Loan(User lender, LoanRequest loanRequest) {
 		super();
 		this.borrower = loanRequest.getBorrower();
@@ -56,15 +56,15 @@ public class Loan {
 		this.dateDue = LocalDate.now().plusDays(loanRequest.getRepaymentTerm().toDays());
 		this.amountRepayed = Money.ZERO;
 	}
-	
+
 	public void repay(final Money money) {
 		this.borrower.withDrawl(money);
 		this.lender.topUp(money);
-		this.amountRepayed =  this.amountRepayed.add(money);
+		this.amountRepayed = this.amountRepayed.add(money);
 	}
-	
+
 	public Money getAmountOwed() {
-		return loanAmount.times(1 + this.interestRate/100d).minus(amountRepayed);
+		return loanAmount.times(1 + this.interestRate / 100d).minus(amountRepayed);
 	}
 
 	/**

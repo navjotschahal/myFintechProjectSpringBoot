@@ -40,7 +40,7 @@ public class Balance {
 			moneyMap.put(money.getCurrency(), moneyMap.get(money.getCurrency()).add(money));
 		}
 	}
-	
+
 	public void withdraw(final Money money) {
 		final Money moneyBalance = moneyMap.get(money.getCurrency());
 		if (moneyBalance == null || moneyBalance.getAmount() <= 0) {

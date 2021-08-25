@@ -10,6 +10,7 @@ import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 
 import com.peerLender.landingEngine.application.enums.Currency;
+import com.peerLender.landingEngine.application.enums.Status;
 
 @Entity
 public class LoanRequest {
@@ -22,6 +23,7 @@ public class LoanRequest {
 	private User borrower;
 	private Duration repaymentTerm;
 	private double interestRate;
+	private Status status;
 
 	public LoanRequest() {
 		super();
@@ -33,6 +35,14 @@ public class LoanRequest {
 		this.borrower = borrower;
 		this.repaymentTerm = repaymentTerm;
 		this.interestRate = interestRate;
+		this.status = Status.ONGOING;
+	}
+
+	public Loan acceptLoanApplication(User lender) {
+		lender.withDrawl(getLoanAmount());
+		borrower.topUp(getLoanAmount());
+		this.status = Status.COMPLETE;
+		return new Loan(lender, this);
 	}
 
 	/**
@@ -72,7 +82,7 @@ public class LoanRequest {
 
 	@Override
 	public int hashCode() {
-		return Objects.hash(borrower, interestRate, loanAmount, repaymentTerm);
+		return Objects.hash(borrower, id, interestRate, loanAmount, repaymentTerm, status);
 	}
 
 	@Override
@@ -84,9 +94,10 @@ public class LoanRequest {
 		if (getClass() != obj.getClass())
 			return false;
 		LoanRequest other = (LoanRequest) obj;
-		return Objects.equals(borrower, other.borrower)
+		return Objects.equals(borrower, other.borrower) && id == other.id
 				&& Double.doubleToLongBits(interestRate) == Double.doubleToLongBits(other.interestRate)
-				&& loanAmount == other.loanAmount && Objects.equals(repaymentTerm, other.repaymentTerm);
+				&& Double.doubleToLongBits(loanAmount) == Double.doubleToLongBits(other.loanAmount)
+				&& Objects.equals(repaymentTerm, other.repaymentTerm) && status == other.status;
 	}
 
 	@Override

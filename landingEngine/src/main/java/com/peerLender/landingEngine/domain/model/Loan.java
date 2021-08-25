@@ -13,6 +13,8 @@ import javax.persistence.OneToOne;
 
 import org.hibernate.annotations.Cascade;
 
+import com.peerLender.landingEngine.application.enums.Status;
+
 @Entity
 public class Loan {
 	@Id
@@ -29,6 +31,7 @@ public class Loan {
 	private LocalDate dateDue;
 	@OneToOne(cascade = CascadeType.ALL)
 	private Money amountRepayed;
+	private Status status;
 
 	public Loan() {
 		super();
@@ -55,16 +58,21 @@ public class Loan {
 		this.dateLent = LocalDate.now();
 		this.dateDue = LocalDate.now().plusDays(loanRequest.getRepaymentTerm().toDays());
 		this.amountRepayed = Money.ZERO;
+		this.status = Status.ONGOING;
 	}
 
 	public void repay(final Money money) {
 		this.borrower.withDrawl(money);
 		this.lender.topUp(money);
 		this.amountRepayed = this.amountRepayed.add(money);
+		if (getAmountOwed().equals(Money.ZERO)) {
+			this.status = Status.COMPLETE;
+		}
 	}
 
 	public Money getAmountOwed() {
-		return loanAmount.times(1 + this.interestRate / 100d).minus(amountRepayed);
+		Money remainingOwedLoanAmount = loanAmount.times(1 + this.interestRate / 100d).minus(amountRepayed);
+		return remainingOwedLoanAmount;
 	}
 
 	/**
@@ -181,7 +189,7 @@ public class Loan {
 
 	@Override
 	public int hashCode() {
-		return Objects.hash(amountRepayed, borrower, dateDue, dateLent, id, interestRate, lender, loanAmount);
+		return Objects.hash(amountRepayed, borrower, dateDue, dateLent, id, interestRate, lender, loanAmount, status);
 	}
 
 	@Override
@@ -196,7 +204,8 @@ public class Loan {
 		return Objects.equals(amountRepayed, other.amountRepayed) && Objects.equals(borrower, other.borrower)
 				&& Objects.equals(dateDue, other.dateDue) && Objects.equals(dateLent, other.dateLent) && id == other.id
 				&& Double.doubleToLongBits(interestRate) == Double.doubleToLongBits(other.interestRate)
-				&& Objects.equals(lender, other.lender) && Objects.equals(loanAmount, other.loanAmount);
+				&& Objects.equals(lender, other.lender) && Objects.equals(loanAmount, other.loanAmount)
+				&& status == other.status;
 	}
 
 	@Override

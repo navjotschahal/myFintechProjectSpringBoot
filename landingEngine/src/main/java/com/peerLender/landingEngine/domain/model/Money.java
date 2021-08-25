@@ -1,5 +1,7 @@
 package com.peerLender.landingEngine.domain.model;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.Objects;
 
 import javax.persistence.Entity;
@@ -19,7 +21,7 @@ public final class Money {
 	private long id;
 
 	private Currency currency;
-	private double amount;
+	private BigDecimal amount;
 
 	/**
 	 * 
@@ -35,23 +37,23 @@ public final class Money {
 	public Money(Currency currency, double amount) {
 		super();
 		this.currency = currency;
-		this.amount = amount;
+		this.amount = BigDecimal.valueOf(amount).setScale(2, RoundingMode.DOWN);
 	}
 
 	public Money times(double multiplier) {
-		return new Money(Currency.USD, this.amount * multiplier);
+		return new Money(Currency.USD, this.amount.doubleValue() * multiplier);
 	}
 
 	public Money add(final Money money) throws IllegalArgumentException {
 		if (this.currency.equals(money.getCurrency())) {
-			return new Money(this.currency, this.amount + money.getAmount());
+			return new Money(this.currency, this.amount.doubleValue() + money.getAmount());
 		}
 		throw new IllegalArgumentException();
 	}
 
 	public Money minus(final Money money) throws IllegalArgumentException {
 		if (this.currency.equals(money.getCurrency())) {
-			return new Money(this.currency, this.amount - money.getAmount());
+			return new Money(this.currency, this.amount.doubleValue() - money.getAmount());
 		}
 		throw new IllegalArgumentException();
 	}
@@ -67,7 +69,7 @@ public final class Money {
 	 * @return the amount
 	 */
 	public double getAmount() {
-		return amount;
+		return amount.doubleValue();
 	}
 
 	@Override
@@ -84,7 +86,7 @@ public final class Money {
 		if (getClass() != obj.getClass())
 			return false;
 		Money other = (Money) obj;
-		return Double.doubleToLongBits(amount) == Double.doubleToLongBits(other.amount) && currency == other.currency;
+		return Objects.equals(amount, other.amount) && currency == other.currency;
 	}
 
 	@Override

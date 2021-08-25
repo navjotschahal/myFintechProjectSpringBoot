@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import com.peerLender.landingEngine.application.enums.Currency;
+import com.peerLender.landingEngine.application.enums.Status;
 import com.peerLender.landingEngine.domain.exception.LoanNotFoundException;
 import com.peerLender.landingEngine.domain.exception.UserNotFoundException;
 import com.peerLender.landingEngine.domain.model.Loan;
@@ -45,11 +46,8 @@ public class LoanServiceImpl implements LoanService {
 		User loanLenderUser = findUser(lenderUserName);
 		LoanRequest loanRequest = loanRequestRepository.findById(loanRequestId)
 				.orElseThrow(() -> new LoanNotFoundException());
-		User borrower = loanRequest.getBorrower();
-		Money money = loanRequest.getLoanAmount();
-		loanLenderUser.withDrawl(money);
-		borrower.topUp(money);
-		loanRepository.save(new Loan(loanLenderUser, loanRequest));
+
+		loanRepository.save(loanRequest.acceptLoanApplication(loanLenderUser));
 	}
 
 	/**
@@ -61,12 +59,12 @@ public class LoanServiceImpl implements LoanService {
 		return userRepository.findById(lenderUserName).orElseThrow(() -> new UserNotFoundException());
 	}
 
-	public List<Loan> findAllBrorrowedLoans(User borrower) {
-		return loanRepository.findAllByBorrower(borrower);
+	public List<Loan> findAllBrorrowedLoans(User borrower, Status status) {
+		return loanRepository.findAllByBorrowerAndStatus(borrower, status);
 	}
 
-	public List<Loan> findAllLentLoans(User lender) {
-		return loanRepository.findAllByLender(lender);
+	public List<Loan> findAllLentLoans(User lender, Status status) {
+		return loanRepository.findAllByLenderAndStatus(lender, status);
 	}
 
 	@Transactional

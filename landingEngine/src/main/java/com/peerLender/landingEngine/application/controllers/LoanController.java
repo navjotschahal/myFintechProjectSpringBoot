@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.peerLender.landingEngine.application.dtos.LoanRequestDto;
+import com.peerLender.landingEngine.application.enums.Status;
 import com.peerLender.landingEngine.domain.model.Loan;
 import com.peerLender.landingEngine.domain.model.LoanRepaymentRequest;
 import com.peerLender.landingEngine.domain.model.LoanRequest;
@@ -54,16 +55,16 @@ public class LoanController {
 		return loanRequestRepository.save(loanRequest);
 	}
 
-	@PostMapping(value = { "loan/request/accept/{loanRequestId}" })
+	@GetMapping(value = { "loan/request/accept/{loanRequestId}" })
 	private void requestLoan(@PathVariable final String loanRequestId, HttpServletRequest request) {
 		User user = tokenValidationServiceImpl.validateTokenAndGetUser(request.getHeader(HttpHeaders.AUTHORIZATION));
 		loanServiceImpl.acceptLoan(Long.parseLong(loanRequestId), user.getUserName());
 	}
 
-	@GetMapping(value = { "loan/requests" })
-	private List<LoanRequest> getLoanRequests(HttpServletRequest request) {
+	@GetMapping(value = { "loan/requests/{status}" })
+	private List<LoanRequest> getLoanRequests(HttpServletRequest request, @PathVariable("status") Status status) {
 		tokenValidationServiceImpl.validateTokenAndGetUser(request.getHeader(HttpHeaders.AUTHORIZATION));
-		return loanRequestRepository.findAll();
+		return loanRequestRepository.findAllByStatusEquals(status);
 	}
 
 	@GetMapping(value = { "loan/loans" })
@@ -72,20 +73,20 @@ public class LoanController {
 		return loanRepository.findAll();
 	}
 
-	@GetMapping(value = { "loan/borrowed" })
-	private List<Loan> findBorrowedLoans(HttpServletRequest request) {
+	@GetMapping(value = { "loan/borrowed/{status}" })
+	private List<Loan> findBorrowedLoans(HttpServletRequest request, @PathVariable("status") Status status) {
 		User borrower = tokenValidationServiceImpl
 				.validateTokenAndGetUser(request.getHeader(HttpHeaders.AUTHORIZATION));
 
-		return loanServiceImpl.findAllBrorrowedLoans(borrower);
+		return loanServiceImpl.findAllBrorrowedLoans(borrower, status);
 	}
 
-	@GetMapping(value = { "loan/lent" })
-	private List<Loan> findLentLoans(HttpServletRequest request) {
+	@GetMapping(value = { "loan/lent/{status}" })
+	private List<Loan> findLentLoans(HttpServletRequest request, @PathVariable("status") Status status) {
 		User borrower = tokenValidationServiceImpl
 				.validateTokenAndGetUser(request.getHeader(HttpHeaders.AUTHORIZATION));
 
-		return loanServiceImpl.findAllLentLoans(borrower);
+		return loanServiceImpl.findAllLentLoans(borrower, status);
 	}
 
 	@PostMapping("/loan/repay")
